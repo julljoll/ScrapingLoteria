@@ -3,9 +3,9 @@ name: Update Lottery Results
 on:
   schedule:
     # Cada hora de 08:00 a 19:00 (hora Venezuela) → 12:00 a 23:00 UTC
-    - cron: "0 12-23 * * *"
+    - cron: "15 12-23 * * *"
     # A las 20:00 (hora Venezuela) → 00:00 UTC
-    - cron: "0 0 * * *"
+    - cron: "15 0 * * *"
   workflow_dispatch:
 
 jobs:

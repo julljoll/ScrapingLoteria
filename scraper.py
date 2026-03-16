@@ -33,7 +33,9 @@ def get_creds():
     return Credentials.from_service_account_file("service_account.json", scopes=scopes)
 
 def fetch(url: str) -> str:
-    r = requests.get(url, headers=HEADERS, timeout=30, verify=False)
+    # Le sumamos un parámetro de tiempo falso para burlar el caché de TuAzar
+    url_fresca = f"{url}?nocache={int(time.time())}"
+    r = requests.get(url_fresca, headers=HEADERS, timeout=30, verify=False)
     r.raise_for_status()
     return r.text
 
