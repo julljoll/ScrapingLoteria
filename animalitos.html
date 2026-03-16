@@ -5,133 +5,417 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+
   <title>Datos de Animalitos Hoy | Pronósticos LotoDía</title>
-  <meta name="description" content="Pronósticos y datos de animalitos para Lotto Activo y La Granjita. Imágenes actualizadas diariamente.">
-  
+  <meta name="description" content="Pronósticos y datos de animalitos para Lotto Activo, La Granjita y más. Actualizados diariamente.">
+  <meta name="theme-color" content="#40C682">
+  <link rel="canonical" href="https://lotodia.com/animalitos.html">
+  <meta property="og:title" content="Datos de Animalitos Hoy | LotoDía">
+  <meta property="og:description" content="Pronósticos y análisis de los animalitos con más probabilidades para hoy.">
+  <meta property="og:type" content="website">
+
   <style>
-    .datos-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
-      margin-top: 20px;
-    }
-    .card-dato {
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      padding: 0; /* Para que la imagen luzca mejor */
-      overflow: hidden;
-      text-align: center;
-      transition: 0.3s;
-    }
-    .card-dato:hover { border-color: var(--accent); transform: scale(1.02); }
-    
-    .card-dato img {
-      width: 100%;
-      height: auto;
-      display: block;
+    /* ── Encabezado de sección por lotería ─────────────────────────────── */
+    .loteria-section { margin-bottom: 36px; }
+
+    .loteria-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
       border-bottom: 1px solid var(--line);
     }
-    .card-dato-info { padding: 15px; }
-    .card-dato h4 { 
-        margin: 0; 
-        color: var(--accent); 
-        font-family: var(--font-display); 
-        font-size: 1.2rem;
+    .loteria-header h3 {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text);
     }
-    .card-dato p { color: var(--muted); font-size: 0.9rem; margin: 5px 0 0; }
+    .loteria-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(64,198,130,.10);
+      border: 1px solid rgba(64,198,130,.30);
+      color: var(--accent);
+      font-size: 11px;
+      font-weight: 600;
+    }
 
-    .card-dato img {
-      width: 100%;
-      height: 200px; /* Altura fija para mantener simetría */
-      object-fit: cover; /* Ajusta la imagen sin deformarla */
-      display: block;
-      background: #1a2233; /* Color de fondo mientras carga */
+    /* ── Grid de cards ─────────────────────────────────────────────────── */
+    .animales-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 12px;
     }
-    
-    .status {
-      grid-column: 1 / -1;
+
+    .card-animal {
+      background: rgba(17,24,39,.72);
+      border: 1px solid rgba(255,255,255,.06);
+      border-radius: 16px;
+      padding: 16px 12px;
       text-align: center;
-      padding: 40px;
+      transition: transform .2s ease, border-color .2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .card-animal:hover {
+      transform: translateY(-2px);
+      border-color: rgba(64,198,130,.30);
+    }
+    /* Número grande como fondo decorativo */
+    .card-animal::before {
+      content: attr(data-num);
+      position: absolute;
+      top: -6px; right: 6px;
+      font-family: var(--font-display);
+      font-size: 3.5rem;
+      color: rgba(64,198,130,.06);
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    .animal-num {
+      display: inline-block;
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: rgba(64,198,130,.12);
+      border: 1px solid rgba(64,198,130,.35);
+      color: var(--accent);
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 700;
+      line-height: 36px;
+      margin-bottom: 8px;
+    }
+    .animal-name {
+      font-family: var(--font-display);
+      font-size: .85rem;
+      color: var(--text);
+      letter-spacing: .5px;
+      text-transform: uppercase;
+      line-height: 1.2;
+    }
+    .animal-frec {
+      margin-top: 6px;
+      font-size: .75rem;
       color: var(--muted);
+    }
+    .animal-frec span {
+      color: var(--accent2);
+      font-weight: 600;
+    }
+
+    /* ── Estados ───────────────────────────────────────────────────────── */
+    .status-msg {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--muted);
+      font-size: .95rem;
+    }
+    .status-msg .icon {
+      font-size: 2rem;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    /* ── Filtro de búsqueda ─────────────────────────────────────────────── */
+    .datos-controls {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      margin-bottom: 20px;
+    }
+    .datos-controls .field { flex: 1; min-width: 180px; }
+    .datos-controls select,
+    .datos-controls input {
+      width: 100%;
+      padding: 11px 12px;
+      border-radius: 14px;
+      background: rgba(10,15,25,.75);
+      border: 1px solid rgba(85,125,190,.22);
+      color: var(--text);
+      outline: none;
+      font-family: inherit;
+    }
+    .datos-controls select:focus,
+    .datos-controls input:focus {
+      border-color: rgba(64,198,130,.65);
+      box-shadow: 0 0 0 4px rgba(64,198,130,.12);
+    }
+
+    /* ── Info strip ────────────────────────────────────────────────────── */
+    .info-strip {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 22px;
+      padding: 12px 16px;
+      background: rgba(64,198,130,.06);
+      border: 1px solid rgba(64,198,130,.15);
+      border-radius: 14px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .info-strip strong { color: var(--accent); }
+
+    @media (max-width: 640px) {
+      .animales-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 8px; }
     }
   </style>
 </head>
 <body>
+  <!-- Topbar idéntica al index -->
   <div class="topbar">
     <div class="topbar-inner">
-        <div class="brand">
-            <a href="/" style="display: flex; align-items:center; gap:10px;">
-                <div class="logo"><img src="logo.svg" alt="LotoDía" class="logo-img"></div>
-                <h1 class="brand-title"><span class="brand-word">LOTO</span> <span class="brand-accent">DÍA</span></h1>
-            </a>
+      <div class="brand">
+        <a href="/" style="display:flex;align-items:center;gap:10px;">
+          <div class="logo">
+            <img src="logo.svg" alt="LotoDía" class="logo-img">
+          </div>
+          <h1 class="brand-title"><span class="brand-word">LOTO</span> <span class="brand-accent">DÍA</span></h1>
+        </a>
+        <span class="pill"><span class="dot"></span><span id="countPill">0</span> datos</span>
+        <div class="topbar-socials">
+          <a href="https://whatsapp.com/channel/0029VbC6h9s1dAvuci3T4l2S" target="_blank" aria-label="WhatsApp"><i data-lucide="message-circle"></i></a>
+          <a href="https://t.me/lotodiavzla" target="_blank" aria-label="Telegram"><i data-lucide="send"></i></a>
         </div>
+      </div>
     </div>
   </div>
 
   <div class="wrap">
+    <!-- Hero -->
     <section class="hero">
-      <h2>Datos y Pronósticos</h2>
-      <p>Análisis diario de los animales con más probabilidades para hoy.</p>
+      <div class="hero-grid">
+        <div>
+          <h2>Datos de Animalitos</h2>
+          <p style="color:var(--muted);margin:8px 0 14px;line-height:1.55;">
+            Pronósticos y frecuencias de los animalitos con más probabilidades para hoy.
+            Datos actualizados diariamente desde loteriadehoy.com.
+          </p>
+          <div class="hero-meta">
+            <span>Última carga: <b id="lastLoad">—</b></span>
+            <span>•</span>
+            <span>Total: <b id="totalCount">—</b> datos</span>
+          </div>
+        </div>
+        <div class="statbox">
+          <div class="big">Análisis Diario</div>
+          <div class="small">Los animales con mayor frecuencia histórica para cada juego disponibles aquí.</div>
+        </div>
+      </div>
     </section>
 
-    <div class="section-title">
-        <h3>Pronósticos del Día</h3>
+    <!-- Navegación de vuelta -->
+    <div style="margin:14px 4px 0;display:flex;gap:10px;align-items:center;">
+      <a href="/" class="tab" style="display:inline-flex;align-items:center;gap:6px;font-size:12px;">
+        <i data-lucide="arrow-left" style="width:14px;height:14px;"></i> Resultados de Lotería
+      </a>
+      <span class="tab active" style="font-size:12px;">Datos de Animalitos</span>
     </div>
 
-    <div id="datos-container" class="datos-grid">
-        <div class="status">Cargando pronósticos de hoy...</div>
+    <!-- Controls -->
+    <div class="section-title" style="margin-top:18px;">
+      <h3>Pronósticos del Día</h3>
+      <div class="countBadge"><span id="countBadge">0</span> mostrados</div>
+    </div>
+
+    <div class="datos-controls">
+      <div class="field">
+        <label for="lotSel">Lotería</label>
+        <select id="lotSel"><option value="">Todas las loterías</option></select>
+      </div>
+      <div class="field">
+        <label for="q">Buscar animal o número</label>
+        <input id="q" placeholder="Ej: Cochino, 20, Carnero…" />
+      </div>
+      <button class="btn" id="refreshBtn" type="button">Actualizar</button>
+    </div>
+
+    <!-- Info strip -->
+    <div class="info-strip" id="infoStrip" style="display:none;">
+      📅 Datos del <strong id="fechaDatos">—</strong> &nbsp;|&nbsp;
+      <strong id="totalLoterias">0</strong> loterías &nbsp;|&nbsp;
+      Fuente: <strong>loteriadehoy.com</strong>
+    </div>
+
+    <!-- Contenido principal -->
+    <div id="main-container">
+      <div class="status-msg">
+        <span class="icon">🔄</span>
+        Cargando datos de animalitos…
+      </div>
     </div>
 
     <footer>
-      <span>© 2026 LotoDía - Pronósticos de Lotería</span>
+      <div class="footer-left">
+        <span>© <span id="year"></span> LotoDía</span>
+        <div class="footer-socials">
+          <a href="https://whatsapp.com/channel/0029VbC6h9s1dAvuci3T4l2S" target="_blank"><i data-lucide="message-circle"></i></a>
+          <a href="https://t.me/lotodiavzla" target="_blank"><i data-lucide="send"></i></a>
+        </div>
+      </div>
+      <span>Datos: loteriadehoy.com</span>
     </footer>
   </div>
 
   <script>
-    const DATOS_CSV ="https://docs.google.com/spreadsheets/d/e/2PACX-1vRy8_sTXB8AQ9BwHR_G1ZQPaoBZ-woa4I1XdCZLapf4HsyQaubride3npFnXhDN_P85dizphkccFcfh/pub?gid=1859691677&single=true&output=csv";
+    // ── CSV de la hoja DatosAnimalitos (gid=1859691677) ────────────────────
+    // Columnas: categoria(0) | fecha(1) | loteria(2) | numero(3) | animal(4) | frecuencia(5)
+    const DATOS_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRy8_sTXB8AQ9BwHR_G1ZQPaoBZ-woa4I1XdCZLapf4HsyQaubride3npFnXhDN_P85dizphkccFcfh/pub?gid=1859691677&single=true&output=csv";
 
-    async function loadDatos() {
-        const container = document.getElementById('datos-container');
-        try {
-            const res = await fetch(DATOS_CSV + "&cachebuster=" + new Date().getTime()); // Evita caché antigua
-            const text = await res.text();
-            
-            // Dividir por líneas y filtrar las que estén vacías
-            const rows = text.split('\n').filter(line => line.trim() !== '').slice(1);
+    let RAW = [];
+    let FILTERED = [];
 
-            if (rows.length === 0) {
-                container.innerHTML = '<div class="status">No hay datos disponibles por ahora.</div>';
-                return;
-            }
-
-            container.innerHTML = rows.map(row => {
-                // Regex para manejar comas dentro de comillas si las hubiera
-                const cols = row.split(/,(?=(?:(?:[^\"]*\"){2})*[^\"]*$)/); 
-                
-                // Mapeo según tu captura:
-                const juego = (cols[3] || "Sorteo").replace(/\"/g, "");
-                const animal = (cols[5] || "").replace(/\"/g, "");
-                const imgUrl = (cols[6] || "").trim().replace(/\"/g, "");
-
-                if (!imgUrl && !animal) return ''; // Salta filas vacías
-
-                return `
-                    <div class="card-dato">
-                        ${imgUrl ? `<img src="${imgUrl}" alt="Dato para ${juego}" onerror="this.style.display='none'">` : ''}
-                        <div class="card-dato-info">
-                            <h4>${juego}</h4>
-                            <p>${animal.toUpperCase()}</p>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        } catch (e) {
-            container.innerHTML = '<p class="error">Error al conectar con los resultados.</p>';
-            console.error("Error cargando CSV:", e);
-        }
+    // ── Parse CSV respetando comillas ───────────────────────────────────────
+    function parseCSV(text) {
+      const lines = text.trim().split('\n');
+      const headers = splitCSVRow(lines[0]).map(h => h.toLowerCase());
+      return lines.slice(1)
+        .filter(l => l.trim())
+        .map(l => {
+          const cols = splitCSVRow(l);
+          const o = {};
+          headers.forEach((h, i) => o[h] = (cols[i] || '').trim());
+          return o;
+        })
+        .filter(r => r.categoria === 'datos_animalitos' && r.numero && r.animal);
     }
-    loadDatos();
+
+    function splitCSVRow(row) {
+      return row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim());
+    }
+
+    // ── Poblar select de loterías ──────────────────────────────────────────
+    function populateSelect(rows) {
+      const lots = [...new Set(rows.map(r => r.loteria))].filter(Boolean).sort();
+      const sel = document.getElementById('lotSel');
+      sel.innerHTML = '<option value="">Todas las loterías</option>' +
+        lots.map(l => `<option value="${esc(l)}">${esc(l)}</option>`).join('');
+    }
+
+    // ── Filtrar ────────────────────────────────────────────────────────────
+    function applyFilters() {
+      const lot = document.getElementById('lotSel').value;
+      const q = document.getElementById('q').value.toLowerCase();
+      FILTERED = RAW.filter(r => {
+        if (lot && r.loteria !== lot) return false;
+        if (q) return (r.animal + ' ' + r.numero + ' ' + r.loteria).toLowerCase().includes(q);
+        return true;
+      });
+      render();
+    }
+
+    // ── Renderizar agrupado por lotería ────────────────────────────────────
+    function render() {
+      const container = document.getElementById('main-container');
+      const badge = document.getElementById('countBadge');
+      const pill = document.getElementById('countPill');
+
+      badge.textContent = FILTERED.length;
+      pill.textContent = FILTERED.length;
+
+      if (!FILTERED.length) {
+        container.innerHTML = `<div class="status-msg"><span class="icon">🔍</span>No hay datos con esos filtros.</div>`;
+        return;
+      }
+
+      // Agrupar por lotería
+      const grupos = {};
+      FILTERED.forEach(r => {
+        if (!grupos[r.loteria]) grupos[r.loteria] = [];
+        grupos[r.loteria].push(r);
+      });
+
+      container.innerHTML = Object.entries(grupos).map(([loteria, items]) => `
+        <div class="loteria-section">
+          <div class="loteria-header">
+            <h3>${esc(loteria)}</h3>
+            <span class="loteria-badge">${items.length} animales</span>
+          </div>
+          <div class="animales-grid">
+            ${items.map(r => cardHtml(r)).join('')}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function cardHtml(r) {
+      const frecHtml = r.frecuencia
+        ? `<div class="animal-frec">Frec: <span>${esc(r.frecuencia)}</span></div>`
+        : '';
+      return `
+        <div class="card-animal" data-num="${esc(r.numero)}">
+          <div class="animal-num">${esc(r.numero)}</div>
+          <div class="animal-name">${esc(r.animal)}</div>
+          ${frecHtml}
+        </div>
+      `;
+    }
+
+    function esc(s) {
+      return String(s || '').replace(/[&<>"']/g, m =>
+        ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m])
+      );
+    }
+
+    // ── Cargar datos ────────────────────────────────────────────────────────
+    async function loadData() {
+      document.getElementById('refreshBtn').disabled = true;
+      document.getElementById('main-container').innerHTML =
+        '<div class="status-msg"><span class="icon">🔄</span>Cargando datos…</div>';
+      try {
+        const res = await fetch(DATOS_CSV + '&t=' + Date.now(), { cache: 'no-store' });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const text = await res.text();
+        RAW = parseCSV(text);
+
+        if (!RAW.length) {
+          document.getElementById('main-container').innerHTML =
+            '<div class="status-msg"><span class="icon">📭</span>No hay datos disponibles por ahora.<br><small>El scraper puede estar actualizando la información.</small></div>';
+          return;
+        }
+
+        // Info strip
+        const fecha = RAW[0]?.fecha || '—';
+        const loterias = [...new Set(RAW.map(r => r.loteria))].length;
+        document.getElementById('fechaDatos').textContent = fecha;
+        document.getElementById('totalLoterias').textContent = loterias;
+        document.getElementById('infoStrip').style.display = 'flex';
+
+        document.getElementById('lastLoad').textContent = new Date().toLocaleString('es-VE');
+        document.getElementById('totalCount').textContent = RAW.length;
+
+        populateSelect(RAW);
+        applyFilters();
+
+      } catch(e) {
+        document.getElementById('main-container').innerHTML =
+          `<div class="status-msg"><span class="icon">❌</span>Error al cargar datos.<br><small>${e.message}</small></div>`;
+        console.error(e);
+      } finally {
+        document.getElementById('refreshBtn').disabled = false;
+      }
+    }
+
+    // ── Eventos ─────────────────────────────────────────────────────────────
+    document.getElementById('lotSel').addEventListener('change', applyFilters);
+    document.getElementById('q').addEventListener('input', applyFilters);
+    document.getElementById('refreshBtn').addEventListener('click', loadData);
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Init
+    loadData();
+    lucide.createIcons();
   </script>
 </body>
 </html>
