@@ -1,0 +1,99 @@
+{
+  "name": "Kiosk Web Environment Setup",
+  "description": "Desarrollo de entorno para una web que muestre un carrusel de resultados optimizados para dispositivos Android TV en modo kiosko, utilizando backend en Python, frontend en Vue + Vite, desplegado en Vercel con bases de datos Neon. El diseño está optimizado para pantallas grandes y móviles con colores pasteles y una UI minimalista.",
+  "platform": "Antigravity",
+  "settings": {
+    "backend": {
+      "language": "Python",
+      "framework": "Flask",
+      "deployment": "Vercel",
+      "database": "Neon",
+      "authentication": "JWT"
+    },
+    "frontend": {
+      "language": "JavaScript",
+      "framework": "Vue",
+      "bundler": "Vite",
+      "responsive": true,
+      "design_system": {
+        "theme": "light",
+        "colors": {
+          "primary": "#f4f4f4",  // Blanco pastel
+          "secondary": "#a8d0e6", // Azul claro
+          "accent": "#ffd700",    // Amarillo suave para contraste
+          "text": "#333333"       // Texto oscuro para buena legibilidad
+        },
+        "typography": {
+          "font_family": "Arial, sans-serif",
+          "font_size": {
+            "large": "24px",
+            "medium": "18px",
+            "small": "14px"
+          },
+          "line_height": "1.5",
+          "letter_spacing": "0.5px"
+        },
+        "layout": {
+          "grid": "flexbox",
+          "justify_content": "center",
+          "align_items": "center",
+          "padding": "20px"
+        },
+        "icons": {
+          "size": "48px", // Ajustable para pantallas grandes y móviles
+          "color": "#ffd700" // Amarillo suave para contrastar
+        }
+      },
+      "kiosk_mode": {
+        "full_screen": true,
+        "navigation": "auto",
+        "carousel": {
+          "type": "horizontal",
+          "transition": "fade",
+          "items_per_page": "auto",
+          "margin": "10px"
+        }
+      }
+    },
+    "device_compatibility": {
+      "tv": {
+        "screen_size": "42",
+        "resolution": "1920x1080",
+        "aspect_ratio": "16:9"
+      },
+      "tablet": {
+        "screen_size": "10",
+        "resolution": "1280x800",
+        "aspect_ratio": "16:10"
+      },
+      "mobile": {
+        "screen_size": "6",
+        "resolution": "1080x1920",
+        "aspect_ratio": "9:16"
+      }
+    }
+  },
+  "actions": {
+    "setup_database": {
+      "provider": "Neon",
+      "setup": "automatic"
+    },
+    "deploy": {
+      "platform": "Vercel",
+      "trigger": "git_push"
+    },
+    "testing": {
+      "responsiveness": "manual",
+      "scenarios": [
+        "TV screens",
+        "Tablet screens",
+        "Mobile devices"
+      ]
+    }
+  },
+  "dev_tools": {
+    "ci_cd": "GitHub Actions",
+    "containerization": "Docker",
+    "version_control": "Git"
+  }
+}
