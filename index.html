@@ -1,137 +1,189 @@
 <!doctype html>
 <html lang="es">
 <head>
- <script async src="https://www.googletagmanager.com/gtag/js?id=G-XL1WQDW9M0"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XL1WQDW9M0"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XL1WQDW9M0');
+    gtag('config', 'AW-18002384971');
+  </script>
 
-  gtag('config', 'G-XL1WQDW9M0');
-
-  // Configuración de Google Ads 
-  gtag('config', 'AW-18002384971');
-</script>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap" rel="stylesheet">
-  
-  <script src="https://unpkg.com/lucide@latest"></script>
-
-  <meta name="theme-color" content="#40C682">
+  <meta name="viewport" content="width=1920" />
+  <meta name="theme-color" content="#a8d0e6">
   <link rel="canonical" href="https://lotodia.com">
-  <meta property="og:title" content="LotoDía | Resultados de Loterías y Animalitos en Venezuela">
-  <meta property="og:description" content="Consulta los resultados de loterías y animalitos en Venezuela actualizados hoy. Filtra por horario, número, signo y terminales.">
+  <meta name="description" content="Resultados de loterías y animalitos en Venezuela actualizados en tiempo real. Modo kiosko para televisores.">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="LotoDía | Resultados en Tiempo Real">
+  <meta property="og:description" content="Consulta todos los resultados de loterías y animalitos de Venezuela.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://lotodia.com">
-  <meta name="twitter:card" content="summary">
-  <link rel="stylesheet" href="style.css">
-  <title>LotoDía | Resultados de Loterías y Animalitos en Venezuela</title>
+  <title>LotoDía | Resultados de Loterías Venezuela — TV Kiosko</title>
   <link rel="icon" type="image/svg+xml" href="logo.svg">
-  <meta name="description" content="Consulta los resultados de loterías y animalitos en Venezuela actualizados hoy. Resultados por horario, número, signo y terminales en tiempo real.">
-  <meta name="keywords" content="resultados loteria venezuela, resultados animalitos hoy, lotto activo, triple zamorano, chance, terminales, animalitos venezuela">
-  <meta name="author" content="LotoDía">
-  <meta name="robots" content="index, follow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Oswald:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T3NHFXC7"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<div class="topbar">
-    <div class="topbar-inner">
-      <div class="brand">
-        <div class="logo" aria-label="LotoDía">
-          <img src="logo.svg" alt="Logo LotoDía" class="logo-img">
-        </div>
-        <div>
-          <h1 class="brand-title"><span class="brand-word">LOTO</span> <span class="brand-accent">DÍA</span></h1>
-          <small id="status">Cargando datos…</small>
-        </div>
-        <span class="pill"><span class="dot"></span><span id="countPill">0</span> resultados</span>
-        
-        <div class="topbar-socials">
-          <a href="https://whatsapp.com/channel/0029VbC6h9s1dAvuci3T4l2S" target="_blank" aria-label="WhatsApp"><i data-lucide="message-circle"></i></a>
-          <a href="https://t.me/lotodiavzla" target="_blank" aria-label="Telegram"><i data-lucide="send"></i></a>
-        </div>
-      </div>
 
-      <div class="controls">
-        <div class="field">
-          <label for="lotSel">Lotería</label>
-          <select id="lotSel"><option value="">Todas</option></select>
-        </div>
-        <div class="field">
-          <label for="q">Buscar</label>
-          <input id="q" placeholder="Ej: 8:00 AM, 775, Aries, terminal..." />
-        </div>
-        <button class="btn" id="refreshBtn" type="button">Actualizar</button>
-      </div>
+<!-- ─── LOADING OVERLAY ─── -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="spinner"></div>
+  <div class="loading-txt">Cargando resultados…</div>
+  <div class="loading-sub">Conectando con las loterías de Venezuela</div>
+</div>
+
+<!-- ─── TOPBAR ─── -->
+<header class="topbar">
+  <!-- Brand -->
+  <div class="brand">
+    <div class="logo-wrap">
+      <img src="logo.svg" alt="LotoDía" />
     </div>
-  </div>
-
-  <div class="wrap">
-    <section class="hero">
-  <div class="hero-grid">
     <div>
-      <h2>Resultados de Loterías</h2>
-      <div class="text-slider">
-        <p id="hero-text" class="slide-active">Consulta los resultados del día por lotería y horario. Filtra por nombre, número, signo o terminales.</p>
-        <p id="promo-text">Sé el primero en enterarte. 🔔 Únete a nuestros canales de <a href="https://whatsapp.com/channel/0029VbC6h9s1dAvuci3T4l2S" target="_blank" class="promo-link">WhatsApp</a> y <a href="https://t.me/lotodiavzla" target="_blank" class="promo-link">Telegram</a> para recibir alertas en tiempo real.</p>
-      </div>
-
-      <div class="hero-meta">
-        <span>Última carga: <b id="lastLoad">—</b></span>
-        <span>•</span>
-        <span>Total filas: <b id="totalRows">—</b></span>
-      </div>
+      <div class="brand-name">LOTO<span>DÍA</span></div>
+      <div class="brand-tagline">Resultados en tiempo real — Venezuela</div>
     </div>
-
-        <div class="statbox">
-          <div class="big">Actualizado en tiempo real</div>
-          <div class="small">Los datos se leen desde las principales agencias de lotería del país y se muestran en esta página.</div>
-        </div>
-      </div>
-    </section>
-
-    <div id="err" class="error" style="display:none;"></div>
-
-    <div class="section-title">
-      <h3>Resultados</h3>
-      <div class="countBadge"><span id="countBadge">0</span> mostrados</div>
-    </div>
-
-    <div class="tabs" id="tabs">
-      <button class="tab active" type="button" data-cat="loteria">Resultados</button>
-      <button class="tab" type="button" data-cat="animalitos">Resultados de Animalitos</button>
-      <a href="animalitos.html" class="tab" style="text-decoration:none; display:inline-flex; align-items:center; gap:6px; color:inherit;">
-        Datos de Animalitos <i data-lucide="arrow-right" style="width:14px;height:14px;"></i>
-      </a>
-    </div>
-
-    <div id="grid" class="grid" style="display:none;"></div>
-    <div id="empty" class="empty" style="display:none;">No hay resultados con esos filtros.</div>
-
-    <footer>
-      <div class="footer-left">
-        <span>© <span id="year"></span> LotoDía</span>
-        <div class="footer-socials">
-          <a href="https://whatsapp.com/channel/0029VbC6h9s1dAvuci3T4l2S" target="_blank"><i data-lucide="message-circle"></i></a>
-          <a href="https://t.me/lotodiavzla" target="_blank"><i data-lucide="send"></i></a>
-        </div>
-      </div>
-      <span>Datos: Loterías de Venezuela</span>
-    </footer>
   </div>
 
-  <noscript>
-    <div class="noscript">Esta página requiere JavaScript para mostrar los resultados.</div>
-  </noscript>
+  <!-- Live badge -->
+  <div class="live-badge">
+    <div class="live-dot"></div>
+    EN VIVO
+  </div>
 
-  <script src="app.js"></script>
-  <script>
-    // Inicializar iconos de Lucide
-    lucide.createIcons();
-  </script>
+  <!-- Right side -->
+  <div class="topbar-right">
+    <div>
+      <div class="topbar-clock" id="clock">00:00:00</div>
+      <div class="topbar-date" id="topDate">—</div>
+    </div>
+    <div class="topbar-stat">
+      <div class="num" id="statTotal">0</div>
+      <div class="lbl">Resultados</div>
+    </div>
+    <div class="topbar-stat">
+      <div class="num" id="statLoterias">0</div>
+      <div class="lbl">Loterías</div>
+    </div>
+    <button class="refresh-btn" id="refreshBtn">
+      ↻ Actualizar
+    </button>
+  </div>
+</header>
+
+<!-- ─── MAIN LAYOUT ─── -->
+<div class="main-layout">
+
+  <!-- ─── SIDEBAR ─── -->
+  <aside class="sidebar">
+
+    <!-- Category tabs -->
+    <div class="sidebar-section-title">Categorías</div>
+    <div class="tab-group">
+      <button class="tab-btn active" id="tabLoteria" data-cat="loteria">
+        <div class="tab-icon">🎰</div>
+        Loterías
+        <span class="count-badge" id="cntLoteria">0</span>
+      </button>
+      <button class="tab-btn" id="tabAnimalitos" data-cat="animalitos">
+        <div class="tab-icon">🐾</div>
+        Animalitos
+        <span class="count-badge" id="cntAnimalitos">0</span>
+      </button>
+    </div>
+
+    <hr class="sidebar-divider">
+
+    <!-- Filters -->
+    <div class="sidebar-section-title">Filtros</div>
+    <div class="filter-group">
+      <div class="filter-label">Lotería</div>
+      <select class="filter-select" id="lotSel">
+        <option value="">Todas las loterías</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <div class="filter-label">Buscar</div>
+      <input class="filter-input" id="q" placeholder="Horario, número, signo…" />
+    </div>
+
+    <hr class="sidebar-divider">
+
+    <!-- Stats -->
+    <div class="sidebar-section-title">Estadísticas</div>
+    <div class="stats-mini">
+      <div class="stat-card accent-blue">
+        <div class="num" id="s1">0</div>
+        <div class="lbl">Loterías</div>
+      </div>
+      <div class="stat-card accent-yellow">
+        <div class="num" id="s2">0</div>
+        <div class="lbl">Animalitos</div>
+      </div>
+      <div class="stat-card accent-green">
+        <div class="num" id="s3">0</div>
+        <div class="lbl">Páginas</div>
+      </div>
+      <div class="stat-card accent-orange">
+        <div class="num" id="s4">15</div>
+        <div class="lbl">x Página</div>
+      </div>
+    </div>
+
+    <div class="last-update" id="lastUpdate" style="display:flex;flex-direction:column;gap:6px;">
+      <div>Actualizado: <b id="lastTime">—</b></div>
+      <div class="refresh-indicator">
+        <div class="refresh-ring"></div>
+        Próximo refresco: <b id="countdownTxt">20s</b>
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- ─── CONTENT AREA ─── -->
+  <main class="content-area">
+
+    <!-- Section header -->
+    <div class="section-header">
+      <div class="section-title" id="sectionTitle">
+        Resultados de <span class="hl">Loterías</span>
+      </div>
+      <div class="section-nav">
+        <span class="nav-info" id="pageInfo">Pág. 1 / 1</span>
+        <button class="nav-btn" id="prevBtn" title="Anterior">‹</button>
+        <button class="nav-btn" id="nextBtn" title="Siguiente">›</button>
+      </div>
+    </div>
+
+    <!-- Auto progress bar -->
+    <div class="auto-progress">
+      <div class="auto-progress-fill" id="progressFill"></div>
+    </div>
+
+    <!-- Carousel -->
+    <div class="carousel-viewport" id="carouselViewport">
+      <div class="carousel-track" id="carouselTrack">
+        <!-- Slides injected by JS -->
+        <div class="carousel-slide">
+          <div class="state-box" id="emptyState">
+            <div class="state-icon">📋</div>
+            <div class="state-msg">Sin resultados disponibles</div>
+            <div class="state-sub">Presiona "Actualizar" para cargar los datos</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dot indicators -->
+    <div class="carousel-dots" id="carouselDots"></div>
+
+  </main>
+</div>
+
+<script type="module" src="/app.js"></script>
 </body>
 </html>
