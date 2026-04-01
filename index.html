@@ -1,187 +1,130 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XL1WQDW9M0"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-XL1WQDW9M0');
-    gtag('config', 'AW-18002384971');
-  </script>
-
   <meta charset="utf-8" />
   <meta name="viewport" content="width=1920" />
-  <meta name="theme-color" content="#a8d0e6">
-  <link rel="canonical" href="https://lotodia.com">
-  <meta name="description" content="Resultados de loterías y animalitos en Venezuela actualizados en tiempo real. Modo kiosko para televisores.">
+  <meta name="theme-color" content="#1e3a5f">
+  <meta name="description" content="Resultado Lotería Lara — Resultados de loterías y animalitos actualizados en tiempo real.">
   <meta name="robots" content="index, follow">
-  <meta property="og:title" content="LotoDía | Resultados en Tiempo Real">
-  <meta property="og:description" content="Consulta todos los resultados de loterías y animalitos de Venezuela.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://lotodia.com">
-  <title>LotoDía | Resultados de Loterías Venezuela — TV Kiosko</title>
+  <title>Resultado Lotería Lara</title>
   <link rel="icon" type="image/svg+xml" href="logo.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Oswald:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<!-- ─── LOADING OVERLAY ─── -->
-<div class="loading-overlay" id="loadingOverlay">
-  <div class="spinner"></div>
-  <div class="loading-txt">Cargando resultados…</div>
-  <div class="loading-sub">Conectando con las loterías de Venezuela</div>
+<!-- ═══════════════════════════════════════════════
+     LOGIN SCREEN
+═══════════════════════════════════════════════ -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-bg"></div>
+  <div class="login-card">
+    <div class="login-brand">Resultado Loteria Lara</div>
+    <div class="login-sub">Ingrese sus credenciales para acceder a los resultados en tiempo real</div>
+
+    <form id="loginForm" autocomplete="off">
+      <div class="login-field">
+        <label for="loginUser">Usuario</label>
+        <input type="text" id="loginUser" placeholder="Ingrese su usuario" required />
+      </div>
+      <div class="login-field">
+        <label for="loginPass">Contraseña</label>
+        <input type="password" id="loginPass" placeholder="Ingrese su contraseña" required />
+      </div>
+      <div class="login-error" id="loginError"></div>
+      <button type="submit" class="login-btn" id="loginBtn">
+        <span id="loginBtnText">Iniciar Sesion</span>
+        <span id="loginSpinner" class="btn-spinner" style="display:none;"></span>
+      </button>
+    </form>
+
+    <div class="login-footer">Desarrollado por www.siriusweb.us</div>
+  </div>
 </div>
 
-<!-- ─── TOPBAR ─── -->
-<header class="topbar">
-  <!-- Brand -->
-  <div class="brand">
-    <div class="logo-wrap">
-      <img src="logo.svg" alt="LotoDía" />
-    </div>
-    <div>
-      <div class="brand-name">LOTO<span>DÍA</span></div>
-      <div class="brand-tagline">Resultados en tiempo real — Venezuela</div>
-    </div>
+<!-- ═══════════════════════════════════════════════
+     MAIN APP (hidden until login)
+═══════════════════════════════════════════════ -->
+<div class="app-wrap" id="appWrap" style="display:none;">
+
+  <!-- ─── LOADING OVERLAY ─── -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="spinner"></div>
+    <div class="loading-txt">Cargando resultados</div>
   </div>
 
-  <!-- Live badge -->
-  <div class="live-badge">
-    <div class="live-dot"></div>
-    EN VIVO
-  </div>
-
-  <!-- Right side -->
-  <div class="topbar-right">
-    <div>
-      <div class="topbar-clock" id="clock">00:00:00</div>
-      <div class="topbar-date" id="topDate">—</div>
-    </div>
-    <div class="topbar-stat">
-      <div class="num" id="statTotal">0</div>
-      <div class="lbl">Resultados</div>
-    </div>
-    <div class="topbar-stat">
-      <div class="num" id="statLoterias">0</div>
-      <div class="lbl">Loterías</div>
-    </div>
-    <button class="refresh-btn" id="refreshBtn">
-      ↻ Actualizar
-    </button>
-  </div>
-</header>
-
-<!-- ─── MAIN LAYOUT ─── -->
-<div class="main-layout">
-
-  <!-- ─── SIDEBAR ─── -->
-  <aside class="sidebar">
-
-    <!-- Category tabs -->
-    <div class="sidebar-section-title">Categorías</div>
-    <div class="tab-group">
-      <button class="tab-btn active" id="tabLoteria" data-cat="loteria">
-        <div class="tab-icon">🎰</div>
-        Loterías
-        <span class="count-badge" id="cntLoteria">0</span>
-      </button>
-      <button class="tab-btn" id="tabAnimalitos" data-cat="animalitos">
-        <div class="tab-icon">🐾</div>
-        Animalitos
-        <span class="count-badge" id="cntAnimalitos">0</span>
-      </button>
-    </div>
-
-    <hr class="sidebar-divider">
-
-    <!-- Filters -->
-    <div class="sidebar-section-title">Filtros</div>
-    <div class="filter-group">
-      <div class="filter-label">Lotería</div>
-      <select class="filter-select" id="lotSel">
-        <option value="">Todas las loterías</option>
-      </select>
-    </div>
-    <div class="filter-group">
-      <div class="filter-label">Buscar</div>
-      <input class="filter-input" id="q" placeholder="Horario, número, signo…" />
-    </div>
-
-    <hr class="sidebar-divider">
-
-    <!-- Stats -->
-    <div class="sidebar-section-title">Estadísticas</div>
-    <div class="stats-mini">
-      <div class="stat-card accent-blue">
-        <div class="num" id="s1">0</div>
-        <div class="lbl">Loterías</div>
-      </div>
-      <div class="stat-card accent-yellow">
-        <div class="num" id="s2">0</div>
-        <div class="lbl">Animalitos</div>
-      </div>
-      <div class="stat-card accent-green">
-        <div class="num" id="s3">0</div>
-        <div class="lbl">Páginas</div>
-      </div>
-      <div class="stat-card accent-orange">
-        <div class="num" id="s4">15</div>
-        <div class="lbl">x Página</div>
+  <!-- ─── TOPBAR ─── -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="brand-text">Resultado Loteria Lara</div>
+      <div class="topbar-divider"></div>
+      <div class="live-badge">
+        <span class="live-dot"></span>
+        EN VIVO
       </div>
     </div>
-
-    <div class="last-update" id="lastUpdate" style="display:flex;flex-direction:column;gap:6px;">
-      <div>Actualizado: <b id="lastTime">—</b></div>
-      <div class="refresh-indicator">
-        <div class="refresh-ring"></div>
-        Próximo refresco: <b id="countdownTxt">20s</b>
+    <div class="topbar-right">
+      <div class="topbar-stat">
+        <span class="stat-num" id="statTotal">0</span>
+        <span class="stat-lbl">Resultados</span>
+      </div>
+      <div class="topbar-stat">
+        <span class="stat-num" id="statLoterias">0</span>
+        <span class="stat-lbl">Loterias</span>
+      </div>
+      <div class="topbar-clock-wrap">
+        <div class="topbar-clock" id="clock">00:00:00</div>
+        <div class="topbar-date" id="topDate"></div>
+      </div>
+      <div class="refresh-pill" id="refreshPill">
+        <span class="refresh-ring"></span>
+        <span id="countdownTxt">20s</span>
+      </div>
+      <div class="user-pill" id="userPill">
+        <span id="userNameDisplay">Usuario</span>
+        <button class="logout-btn" id="logoutBtn" title="Cerrar sesion">Salir</button>
       </div>
     </div>
+  </header>
 
-  </aside>
+  <!-- ─── CAROUSEL CONTAINER ─── -->
+  <div class="carousel-zone">
 
-  <!-- ─── CONTENT AREA ─── -->
-  <main class="content-area">
-
-    <!-- Section header -->
-    <div class="section-header">
-      <div class="section-title" id="sectionTitle">
-        Resultados de <span class="hl">Loterías</span>
-      </div>
-      <div class="section-nav">
-        <span class="nav-info" id="pageInfo">Pág. 1 / 1</span>
-        <button class="nav-btn" id="prevBtn" title="Anterior">‹</button>
-        <button class="nav-btn" id="nextBtn" title="Siguiente">›</button>
-      </div>
+    <!-- Section title overlay -->
+    <div class="slide-category-bar">
+      <span class="cat-label" id="catLabel">Cargando...</span>
+      <span class="cat-page" id="catPage"></span>
     </div>
 
-    <!-- Auto progress bar -->
+    <!-- Auto-progress -->
     <div class="auto-progress">
       <div class="auto-progress-fill" id="progressFill"></div>
     </div>
 
-    <!-- Carousel -->
+    <!-- Carousel viewport -->
     <div class="carousel-viewport" id="carouselViewport">
-      <div class="carousel-track" id="carouselTrack">
-        <!-- Slides injected by JS -->
-        <div class="carousel-slide">
-          <div class="state-box" id="emptyState">
-            <div class="state-icon">📋</div>
-            <div class="state-msg">Sin resultados disponibles</div>
-            <div class="state-sub">Presiona "Actualizar" para cargar los datos</div>
-          </div>
-        </div>
-      </div>
+      <div class="carousel-track" id="carouselTrack"></div>
     </div>
 
-    <!-- Dot indicators -->
+    <!-- Dots -->
     <div class="carousel-dots" id="carouselDots"></div>
+  </div>
 
-  </main>
+  <!-- ─── MARQUEE ─── -->
+  <div class="marquee-bar">
+    <span class="marquee-label">Usuarios conectados:</span>
+    <div class="marquee-track">
+      <span class="marquee-content" id="marqueeContent">Cargando usuarios...</span>
+    </div>
+  </div>
+
+  <!-- ─── FOOTER ─── -->
+  <footer class="app-footer">
+    Desarrollado por www.siriusweb.us
+  </footer>
+
 </div>
 
 <script type="module" src="/app.js"></script>
